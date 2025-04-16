@@ -1,0 +1,23 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Categorias</h1>
+</div>
+<form method="post" action="{{ route('admin.categoria.store') }}" autocomplete="off">
+    @csrf
+    <div class="row">
+        @component('components.forms.input', [
+            'id'        => 'nome',
+            'name'      => 'nome',
+            'label'     => 'Nome',
+            'type'      => 'text',
+            'value'     => old('nome'),
+            'maxlength' => 50
+        ])
+        @endcomponent
+
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>
+@endsection
