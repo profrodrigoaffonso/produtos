@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class Cliente extends Model
+class Admin extends Model
 {
-    /** @use HasFactory<\Database\Factories\ClienteFactory> */
+    /** @use HasFactory<\Database\Factories\AdminFactory> */
     use HasFactory;
 
     protected $fillable = ['uuid', 'nome', 'email', 'user_id'];

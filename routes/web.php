@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\LojaController;
+use App\Http\Controllers\AdminController;
+use Illuminate\Http\Request;
+
+
 
 Route::get('/', function () {
     return view('login.index');
@@ -14,14 +20,14 @@ Route::get('/login', function () {
 });
 
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.login');
-Route::post('/logincliente', [ClienteController::class, 'authenticate'])->name('cliente.login');
-Route::get('/logoutcliente', [ClienteController::class, 'logout'])->name('cliente.logout');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
 
 
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/verificacao', [LoginController::class, 'verificacao'])->name('admin.login.verificacao');
+
     Route::prefix('categorias')->group(function () {
         Route::get('/', [CategoriaController::class, 'index'])->name('admin.categoria.index');
         Route::get('/novo', [CategoriaController::class, 'create'])->name('admin.categoria.create');
@@ -49,9 +55,32 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     });
 
+    Route::prefix('admins')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('admin.admin.index');
+        Route::get('/novo', [AdminController::class, 'create'])->name('admin.admin.create');
+        Route::get('/{id}/editar', [AdminController::class, 'edit'])->name('admin.admin.edit');
+        Route::post('/salvar', [AdminController::class, 'store'])->name('admin.admin.store');
+        Route::put('/atualizar', [AdminController::class, 'update'])->name('admin.admin.update');
+
+    });
+
 
 });
 
+Route::prefix('admins')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.admin.index');
+    Route::get('/novo', [AdminController::class, 'create'])->name('admin.admin.create');
+    Route::get('/{id}/editar', [AdminController::class, 'edit'])->name('admin.admin.edit');
+    Route::post('/salvar', [AdminController::class, 'store'])->name('admin.admin.store');
+    Route::put('/atualizar', [AdminController::class, 'update'])->name('admin.admin.update');
+
+});
+
+
+
 Route::prefix('loja')->middleware(['auth'])->group(function () {
+
+    Route::get('/', [LojaController::class, 'index'])->name('loja.index');
+    Route::get('/{uuid}/detalhes', [LojaController::class, 'detalhes'])->name('loja.detalhes');
 
 });

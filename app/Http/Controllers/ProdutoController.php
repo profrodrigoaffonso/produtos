@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProdutoRequest;
 use App\Http\Requests\UpdateProdutoRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Produto;
 use App\Models\Categoria;
@@ -11,11 +12,15 @@ use App\Helpers\Helpers;
 
 class ProdutoController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        if(Auth::user()->tipo <> 'Admin'){
+            return redirect('/logout');
+        }
         $produtos = Produto::lista(array('produtos.id','produtos.uuid','produtos.nome','categorias.nome AS categoria'), 'produtos.nome', 'ASC', 20);
         return view('admin.produtos.index', compact('produtos'));
     }
@@ -25,6 +30,9 @@ class ProdutoController extends Controller
      */
     public function create()
     {
+        if(Auth::user()->tipo <> 'Admin'){
+            return redirect('/logout');
+        }
         $categoriasCombo = Categoria::comboCategorias();
         return view('admin.produtos.create', compact('categoriasCombo'));
     }
@@ -55,6 +63,9 @@ class ProdutoController extends Controller
      */
     public function edit($uuid)
     {
+        if(Auth::user()->tipo <> 'Admin'){
+            return redirect('/logout');
+        }
         $produto = Produto::buscaUuid($uuid);
         $categoriasCombo = Categoria::comboCategorias();
         return view('admin.produtos.edit', compact('produto','categoriasCombo'));

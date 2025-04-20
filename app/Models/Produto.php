@@ -24,4 +24,11 @@ class Produto extends Model
     public static function buscaUuid($uuid){
         return self::where('uuid', $uuid)->first();
     }
+
+    public static function detalhes($uuid){
+        return self::select('produtos.id', 'produtos.nome', 'produtos.uuid', 'categorias.nome AS categoria')
+                    ->join('categorias', 'produtos.categoria_id', '=', 'categorias.id')
+                    ->where('produtos.uuid', $uuid)
+                    ->first();
+    }
 }

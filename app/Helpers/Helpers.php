@@ -26,5 +26,16 @@ class Helpers
         }
         return $dados;
     }
+
+    public static function valoresNumericosCombo($inicio = 1, $fim = 10){
+
+        $retorno = array();
+
+        for($i = $inicio; $i <= $fim; $i++){
+            $retorno[$i] = $i;
+        }
+
+        return $retorno;
+    }
 }
 

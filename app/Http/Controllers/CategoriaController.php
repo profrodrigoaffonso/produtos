@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoriaRequest;
 use App\Http\Requests\UpdateCategoriaRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Categoria;
 use App\Helpers\Helpers;
@@ -15,6 +16,9 @@ class CategoriaController extends Controller
      */
     public function index()
     {
+        if(Auth::user()->tipo <> 'Admin'){
+            return redirect('/logout');
+        }
         $categorias = Categoria::lista(array('id','uuid','nome'), 'nome', 'ASC', 20);
         return view('admin.categorias.index', compact('categorias'));
     }
@@ -52,6 +56,9 @@ class CategoriaController extends Controller
      */
     public function edit($uuid)
     {
+        if(Auth::user()->tipo <> 'Admin'){
+            return redirect('/logout');
+        }
         $categoria = Categoria::buscaUuid($uuid);
         return view('admin.categorias.edit', compact('categoria'));
     }

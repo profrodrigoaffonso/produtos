@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('tipo', ['Admin', 'Cliente'])->default('Admin');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -36,15 +37,15 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
-        DB::table('users')->insert(
-            [
-                'name'          => 'Rodrigo Affonso',
-                'email'         => 'raffonso1978@gmail.com',
-                'password'      => Hash::make('login'),
-                'created_at'    => date('Y-m-d H:i:s'),
-                'updated_at'    => date('Y-m-d H:i:s'),
-            ]
-        );
+        // DB::table('users')->insert(
+        //     [
+        //         'name'          => 'Rodrigo Affonso',
+        //         'email'         => 'raffonso1978@gmail.com',
+        //         'password'      => Hash::make('login'),
+        //         'created_at'    => date('Y-m-d H:i:s'),
+        //         'updated_at'    => date('Y-m-d H:i:s'),
+        //     ]
+        // );
     }
 
     /**

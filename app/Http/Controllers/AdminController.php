@@ -2,24 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreClienteRequest;
-use App\Http\Requests\UpdateClienteRequest;
-use App\Models\Cliente;
+use App\Http\Requests\StoreAdminRequest;
+use App\Http\Requests\UpdateAdminRequest;
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Helpers\Helpers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-class ClienteController extends Controller
+class AdminController extends Controller
 {
-
-    public function logout()
-    {
-        Auth::guard('cliente')->logout();
-        return redirect('/login'); // ou qualquer rota desejada
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -33,10 +26,10 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->tipo <> 'Admin'){
-            return redirect('/logout');
-        }
-        return view('admin.clientes.create');
+        // if(Auth::user()->tipo <> 'admin'){
+        //     return redirect('/logout');
+        // }
+        return view('admin.admins.create');
     }
 
     /**
@@ -45,21 +38,21 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $dados = $request->all();
-        $dados['tipo']          = 'Cliente';
+        $dados['tipo']          = 'Admin';
         $dados['name']          = $dados['nome'];
         $dados                  = Helpers::formataBase($dados);
         $dados['password']      = Hash::make($dados['password']);
         $user                   = User::create($dados);
         $dados['user_id']       = $user->id;
         $dados['uuid']          = sha1(uniqid());
-        Cliente::create($dados);
+        Admin::create($dados);
         return redirect(route('admin.categoria.index'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Cliente $cliente)
+    public function show(Admin $admin)
     {
         //
     }
@@ -67,7 +60,7 @@ class ClienteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cliente $cliente)
+    public function edit(Admin $admin)
     {
         //
     }
@@ -75,7 +68,7 @@ class ClienteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateClienteRequest $request, Cliente $cliente)
+    public function update(UpdateAdminRequest $request, Admin $admin)
     {
         //
     }
@@ -83,7 +76,7 @@ class ClienteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cliente $cliente)
+    public function destroy(Admin $admin)
     {
         //
     }
