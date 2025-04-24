@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Cliente;
 use App\Models\Admin;
+use App\Models\Carrinho;
 
 class LoginController extends Controller
 {
@@ -31,7 +32,11 @@ class LoginController extends Controller
             } else {
                 $cliente = Cliente::porUserId(Auth::user()->id);
                 session(['cliente' => $cliente]);
-                return redirect(route('loja.index'));
+                Carrinho::where('ip', $_SERVER['REMOTE_ADDR'])
+                    ->where('cliente_id', null)
+                    ->update(['cliente_id' => session('cliente')->id]);
+                Carrinho::atualizaDataCarrinho();
+                return redirect()->back();
             }
         }
 
@@ -45,7 +50,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect('/login');
     }
 
 

@@ -10,14 +10,16 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 
 
-
 Route::get('/', function () {
+    return redirect(route('loja.index'));
+});
+
+
+Route::get('/login', function () {
     return view('login.index');
 });
 
-Route::get('/login', function () {
-    return view('logincliente.index');
-});
+
 
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.login');
 
@@ -78,9 +80,18 @@ Route::prefix('admins')->group(function () {
 
 
 
-Route::prefix('loja')->middleware(['auth'])->group(function () {
+Route::prefix('loja')->group(function () {
 
+    Route::get('/limpar-carrinho', [LojaController::class, 'limparCarrinho'])->name('loja.limpar');
     Route::get('/', [LojaController::class, 'index'])->name('loja.index');
     Route::get('/{uuid}/detalhes', [LojaController::class, 'detalhes'])->name('loja.detalhes');
+    Route::get('/{uuid}/{quantidade}/adicionar', [LojaController::class, 'adicionar'])->name('loja.adicionar');
+    Route::get('/carrinho', [LojaController::class, 'carrinho'])->name('loja.carrinho');
 
+});
+
+Route::prefix('loja')->middleware(['auth'])->group(function () {
+    Route::post('/fechar', [LojaController::class, 'store'])->name('loja.store');
+    Route::get('/{uuid}/checkout', [LojaController::class, 'checkout'])->name('loja.checkout');
+    Route::post('/{uuid}/finalizar', [LojaController::class, 'finalizar'])->name('loja.finalizar');
 });

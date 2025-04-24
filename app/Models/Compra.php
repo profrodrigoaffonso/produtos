@@ -9,4 +9,6 @@ class Compra extends Model
 {
     /** @use HasFactory<\Database\Factories\CompraFactory> */
     use HasFactory;
+
+    protected $fillable = ['cliente_id', 'uuid', 'valor', 'forma_pagamento_id', 'data_vencimento', 'data_pagamento'];
 }

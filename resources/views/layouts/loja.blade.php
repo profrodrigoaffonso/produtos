@@ -94,7 +94,11 @@
   <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="javascript:logout()">Logout</a>
+      @if(session('cliente'))
+         <a class="nav-link px-3" href="javascript:logout()">Logout</a>
+      @else
+         <a class="nav-link px-3" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+      @endif
     </div>
   </div>
 </header>
@@ -109,7 +113,31 @@
     </main>
   </div>
 </div>
-
+<!-- Modal de Login -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content p-3">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="loginForm" action="{{ route('login.login') }}" method="post">
+            @csrf
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mail</label>
+              <input type="email" name="email" class="form-control" id="email" placeholder="Digite seu e-mail" required>
+            </div>
+            <div class="mb-3">
+              <label for="senha" class="form-label">Senha</label>
+              <input type="password" name="password" class="form-control" id="senha" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <script src="/js/bootstrap.bundle.min.js"></script>
 
@@ -121,5 +149,8 @@
         if(window.confirm('Deseja deslogar?')){
             window.location = '/logout'
         }
+    }
+    function login(){
+        alert('login')
     }
 </script>

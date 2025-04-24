@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('cliente_id')->unsigned();
+            $table->string('uuid', 40);
             $table->decimal('valor', 10, 2)->nullable();
             $table->bigInteger('forma_pagamento_id')->unsigned();
-            $table->dateTime('data_vencimento')->nullable();
-            $table->dateTime('data_pagamento')->nullable();
+            $table->date('data_vencimento')->nullable();
+            $table->date('data_pagamento')->nullable();
             $table->timestamps();
         });
 
