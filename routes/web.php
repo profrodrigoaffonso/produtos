@@ -40,6 +40,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     });
     Route::prefix('produtos')->group(function () {
         Route::get('/', [ProdutoController::class, 'index'])->name('admin.produto.index');
+        Route::get('/exportar', [ProdutoController::class, 'exportar'])->name('admin.produto.exportar');
+        Route::get('/importar', [ProdutoController::class, 'importar'])->name('admin.produto.importar');
+        Route::post('/upload', [ProdutoController::class, 'upload'])->name('admin.produto.upload');
         Route::get('/novo', [ProdutoController::class, 'create'])->name('admin.produto.create');
         Route::get('/{id}/editar', [ProdutoController::class, 'edit'])->name('admin.produto.edit');
         Route::post('/salvar', [ProdutoController::class, 'store'])->name('admin.produto.store');

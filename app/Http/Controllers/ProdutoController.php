@@ -4,8 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProdutoRequest;
 use App\Http\Requests\UpdateProdutoRequest;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 use App\Models\Produto;
 use App\Models\Categoria;
 use App\Helpers\Helpers;
@@ -21,8 +27,94 @@ class ProdutoController extends Controller
         if(Auth::user()->tipo <> 'Admin'){
             return redirect('/logout');
         }
-        $produtos = Produto::lista(array('produtos.id','produtos.uuid','produtos.nome','categorias.nome AS categoria'), 'produtos.nome', 'ASC', 20);
+        $produtos = Produto::lista(array('produtos.id','produtos.uuid','produtos.nome','produtos.valor','categorias.nome AS categoria'), 'produtos.nome', 'ASC', 20);
         return view('admin.produtos.index', compact('produtos'));
+    }
+
+    public function exportar(){
+
+        $produtos = Produto::listaExport();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', "ID");
+        $sheet->setCellValue('B1', "Nome");
+        $sheet->setCellValue('C1', "Categoria");
+        $sheet->setCellValue('D1', "Valor");
+
+        $i = 2;
+
+        foreach ($produtos as $key => $produto) {
+
+            $sheet->setCellValue('A' . $i, $produto->id);
+            $sheet->setCellValue('B' . $i, $produto->nome);
+            $sheet->setCellValue('C' . $i, $produto->categoria);
+            $sheet->setCellValue('D' . $i, $produto->valor);
+
+            $i++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        $file = "excel/".sha1(uniqid()).".xlsx";
+        $writer->save($file);
+
+        $headers = ['Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+
+        return response()->download($file, 'Produtos_' . date('YmdHis') . '.xlsx', $headers)->deleteFileAfterSend(true);
+
+    }
+
+    public function importar(){
+        return view('admin.produtos.importar');
+    }
+
+    public function upload(Request $request)
+    {
+        $arquivo = $request->file('arquivo');
+
+        $nome = uniqid() . '.xlsx';
+
+        if (move_uploaded_file($arquivo->getPathname(), 'uploads/' . $nome)) {
+
+            // Carrega o arquivo
+            $spreadsheet = IOFactory::load('uploads/' . $nome);
+
+            // Pega a primeira aba ativa
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Lê todas as linhas como array
+            $dados = $sheet->toArray();
+
+            $categorias = Categoria::pluck('id', 'nome')->toArray();
+
+            unset($dados[0]);
+
+            foreach($dados as $row){
+
+                $categoria_id = $categorias[mb_strtoupper($row[1])];
+
+                $verificar = Produto::where('nome', mb_strtoupper($row[0]))->first();
+
+                if(!$verificar){
+                    Produto::create([
+                        'nome'                  => mb_strtoupper($row[0]),
+                        'uuid'                  => sha1(uniqid()),
+                        'categoria_id'          => $categoria_id,
+                        'valor'                 => str_replace(',', '.', $row[2])
+                    ]);
+                }
+
+            }
+
+            unlink('uploads/' . $nome);
+
+            return redirect(route('admin.produto.index'));
+
+        } else {
+            echo "Possível ataque de upload de arquivo!\n";
+        }
     }
 
     /**

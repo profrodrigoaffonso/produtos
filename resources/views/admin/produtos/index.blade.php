@@ -5,6 +5,8 @@
     <h1 class="h2">Produtos</h1>
 </div>
 <a href="{{ route('admin.produto.create') }}" class="btn btn-primary">Novo</a>
+<a href="{{ route('admin.produto.exportar') }}" class="btn btn-primary">Exportar</a>
+<a href="{{ route('admin.produto.importar') }}" class="btn btn-primary">Importar</a>
 <table class="table table-hover">
     <thead>
         <tr>

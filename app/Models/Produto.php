@@ -21,6 +21,12 @@ class Produto extends Model
 
     }
 
+    public static function listaExport(){
+        return self::select('produtos.id','produtos.uuid','produtos.valor','produtos.nome','categorias.nome AS categoria')
+                    ->join('categorias', 'produtos.categoria_id', '=', 'categorias.id')
+                    ->get();
+    }
+
     public static function buscaUuid($uuid){
         return self::where('uuid', $uuid)->first();
     }

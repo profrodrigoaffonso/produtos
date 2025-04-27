@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Helpers\Helpers;
+
 use App\Models\Produto;
 use App\Models\Carrinho;
 use App\Models\Compra;
 use App\Models\CompraProduto;
 use App\Models\FormaPagamento;
-use App\Helpers\Helpers;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-
 
 class LojaController extends Controller
 {
