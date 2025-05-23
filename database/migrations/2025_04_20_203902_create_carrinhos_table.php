@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('carrinhos', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('cliente_id')->unsigned();
+            $table->bigInteger('cliente_id')->unsigned()->nullable();
             $table->bigInteger('produto_id')->unsigned();
+            $table->string('ip', 30)->nullable();
             $table->integer('quantidade');
+            $table->decimal('valor_unitario', 10, 2);
             $table->decimal('valor', 10, 2);
             $table->timestamps();
         });

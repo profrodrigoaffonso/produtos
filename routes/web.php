@@ -72,14 +72,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 });
 
-Route::prefix('admins')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.admin.index');
-    Route::get('/novo', [AdminController::class, 'create'])->name('admin.admin.create');
-    Route::get('/{id}/editar', [AdminController::class, 'edit'])->name('admin.admin.edit');
-    Route::post('/salvar', [AdminController::class, 'store'])->name('admin.admin.store');
-    Route::put('/atualizar', [AdminController::class, 'update'])->name('admin.admin.update');
+// Route::prefix('admins')->group(function () {
+//     Route::get('/', [AdminController::class, 'index'])->name('admin.admin.index');
+//     Route::get('/novo', [AdminController::class, 'create'])->name('admin.admin.create');
+//     Route::get('/{id}/editar', [AdminController::class, 'edit'])->name('admin.admin.edit');
+//     Route::post('/salvar', [AdminController::class, 'store'])->name('admin.admin.store');
+//     Route::put('/atualizar', [AdminController::class, 'update'])->name('admin.admin.update');
 
-});
+// });
 
 
 

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('compra_id')->unsigned();
             $table->bigInteger('produto_id')->unsigned();
+            $table->decimal('valor_unitario', 10, 2)->nullable();
             $table->decimal('valor', 10, 2);
             $table->integer('quantidade');
             $table->timestamps();

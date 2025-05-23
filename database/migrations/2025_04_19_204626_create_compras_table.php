@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('cliente_id')->unsigned();
             $table->string('uuid', 40);
             $table->decimal('valor', 10, 2)->nullable();
-            $table->bigInteger('forma_pagamento_id')->unsigned();
+            $table->bigInteger('forma_pagamento_id')->unsigned()->nullable();
             $table->date('data_vencimento')->nullable();
             $table->date('data_pagamento')->nullable();
             $table->timestamps();
