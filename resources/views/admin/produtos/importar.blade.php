@@ -19,6 +19,8 @@
 
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="/uploads/modelo.xlsx" class="btn btn-primary">Modelo</a>
+    
 </form>
 <script src="/js/produtos.js"></script>
 @endsection
